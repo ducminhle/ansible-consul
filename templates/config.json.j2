@@ -124,10 +124,28 @@
     {## Server/Client ##}
     "server": {{ (item.config_version != 'client') | bool | to_json }},
 
+    {## Mesh Gateways ##}
+    {% if primary_datacenter is defined and primary_datacenter != consul_datacenter %}
+    "primary_datacenter": "{{ primary_datacenter }}",
+    "primary_gateways": 
+    {% if primary_gateways | length >0 %}
+    {{ primary_gateways | list | to_json }},
+    {% else %}
+    {% for server in _consul_wan_servers %}
+        {% if hostvars[server]['consul_datacenter'] == {{ primary_datacenter }} %}
+            {% set _ = consul_primary_gateways.append(':'.join(hostvars[server]['consul_advertise_address_wan'] | default(hostvars[server]['consul_bind_address']), hostvars[server]['primary_gateways_port'])) %}
+        {% endif %}
+    {% endfor %}
+    {{ consul_primary_gateways | list | to_json }},
+    {% endif %}
+    "primary_gateways_interval": {{ primary_gateways_interval }},
+    {% endif %}
+
     {## Enable Connect on Server ##}
     {% if (item.config_version != 'client') and consul_connect_enabled %}
     "connect": {
-        "enabled": true
+        "enabled": true,
+        "enable_mesh_gateway_wan_federation": {{ enable_mesh_gateway_wan_federation | bool | to_json }}
     },
     {% endif %}
 

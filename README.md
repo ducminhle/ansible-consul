@@ -1091,9 +1091,28 @@ consul3.node.consul.  0 IN  A 10.1.42.230
 - Custom list of addresses to listen on.
 - Default value: *[]*
 
+### `primary_datacenter`
+
+- This designates the datacenter which is authoritative for ACL information, intentions and is the root Certificate Authority for Connect. It must be provided to enable ACLs. All servers and datacenters must agree on the primary datacenter.
+
+### `primary_gateways`
+
+- Takes a list of addresses to use as the mesh gateways for the primary datacenter when authoritative replicated catalog data is not present. This was added in Consul 1.8.0.
+- Default value: *[]*
+
+### `primary_gateways_interval`
+
+- Time to wait between primary_gateways discovery attempts. This was added in Consul 1.8.0.
+- Default value: 30s
+
 ### `consul_connect_enabled`
 
 - Enable Consul Connect feature on servers
+- Default value: false
+
+### `enable_mesh_gateway_wan_federation`
+
+- WAN federation via mesh gateways allows for Consul servers in different datacenters to be federated exclusively through mesh gateways. This was added in Consul 1.8.0
 - Default value: false
 
 ### iptables DNS Forwarding Support

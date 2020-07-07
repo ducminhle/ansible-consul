@@ -7,7 +7,7 @@ is_virtualenv: "{{ lookup('env','VIRTUAL_ENV') | default('', true) }}"
 consul_install_dependencies: true
 
 ### Package
-consul_version: "{{ lookup('env','CONSUL_VERSION') | default('1.7.3', true) }}"
+consul_version: "{{ lookup('env','CONSUL_VERSION') | default('1.8.0', true) }}"
 consul_architecture_map:
   # this first entry seems redundant
   # (but it's required for reasons)
@@ -249,5 +249,11 @@ consul_snapshot_stale: false
 # services
 consul_services: []
 
+# mesh gateways
+primary_gateways: []
+primary_gateways_port: 443
+primary_gateways_interval: 30s
+
 # enable Consul Connect
 consul_connect_enabled: false
+enable_mesh_gateway_wan_federation: false
